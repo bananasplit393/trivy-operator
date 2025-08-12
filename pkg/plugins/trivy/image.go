@@ -139,7 +139,6 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		volumes = append(volumes, *volume)
 		volumeMounts = append(volumeMounts, *volumeMount)
 	}
-	
 	initContainers = append(initContainers, corev1.Container{
 		Name:                     p.idGenerator.GenerateID(),
 		Image:                    trivyImageRef,
@@ -671,7 +670,7 @@ func getCommandAndArgs(ctx trivyoperator.PluginContext, mode Mode, imageRef, tri
 	}
 
 	if trivyConfig.ConfigFileExists() {
-		args = append(args, "--config", "/etc/trivy/config.yaml")
+		args = append(args, "--config", configFileMountPath)
 	}
 
 	// Add command to args as it is now need to pipe output to compress.
