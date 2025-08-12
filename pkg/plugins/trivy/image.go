@@ -120,7 +120,12 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		volumes = append(volumes, *volume)
 		volumeMounts = append(volumeMounts, *volumeMount)
 	}
-
+	
+	if volume, volumeMount := config.GenerateConfigFileVolumeIfAvailable(trivyConfigName); volume != nil && volumeMount != nil {
+		volumes = append(volumes, *volume)
+		volumeMounts = append(volumeMounts, *volumeMount)
+	}
+	
 	var initContainers []corev1.Container
 
 	args := []string{
@@ -135,10 +140,6 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		args = append(args, "--config", configFileMountPath)
 	}
 	
-	if volume, volumeMount := config.GenerateConfigFileVolumeIfAvailable(trivyConfigName); volume != nil && volumeMount != nil {
-		volumes = append(volumes, *volume)
-		volumeMounts = append(volumeMounts, *volumeMount)
-	}
 	initContainers = append(initContainers, corev1.Container{
 		Name:                     p.idGenerator.GenerateID(),
 		Image:                    trivyImageRef,
@@ -167,7 +168,6 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 			argsDBUpdater = append(argsDBUpdater, "--config", configFileMountPath)
 		}
 
-
 		initContainers = append(initContainers, corev1.Container{
 			Name:                     p.idGenerator.GenerateID(),
 			Image:                    trivyImageRef,
@@ -185,7 +185,6 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 	}
 
 	containers := make([]corev1.Container, 0)
-	
 	volumeMounts = append(volumeMounts, getScanResultVolumeMount())
 	volumes = append(volumes, getScanResultVolume())
 
