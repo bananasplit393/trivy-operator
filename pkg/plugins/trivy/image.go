@@ -121,6 +121,11 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		volumeMounts = append(volumeMounts, *volumeMount)
 	}
 
+	if volume, volumeMount := config.GenerateConfigFileVolumeIfAvailable(trivyConfigName); volume != nil && volumeMount != nil {
+		volumes = append(volumes, *volume)
+		volumeMounts = append(volumeMounts, *volumeMount)
+	}
+
 	var initContainers []corev1.Container
 
 	args := []string{
@@ -131,6 +136,7 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		"--db-repository",
 		dbRepository,
 	}
+
 	if config.ConfigFileExists() {
 		args = append(args, "--config", configFileMountPath)
 	}
@@ -185,11 +191,6 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 	volumes = append(volumes, getScanResultVolume())
 
 	if volume, volumeMount := config.GenerateIgnoreFileVolumeIfAvailable(trivyConfigName); volume != nil && volumeMount != nil {
-		volumes = append(volumes, *volume)
-		volumeMounts = append(volumeMounts, *volumeMount)
-	}
-
-	if volume, volumeMount := config.GenerateConfigFileVolumeIfAvailable(trivyConfigName); volume != nil && volumeMount != nil {
 		volumes = append(volumes, *volume)
 		volumeMounts = append(volumeMounts, *volumeMount)
 	}
