@@ -542,6 +542,7 @@ func GetFSScanningArgs(ctx trivyoperator.PluginContext, command Command, mode Mo
 	if pkgList != "" {
 		args = append(args, pkgList)
 	}
+
 	return args
 }
 
@@ -573,6 +574,7 @@ func GetSbomFSScanningArgs(ctx trivyoperator.PluginContext, mode Mode, trivyServ
 	if slow != "" {
 		args = append(args, slow)
 	}
+	
 	return command, args
 }
 

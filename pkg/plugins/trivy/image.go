@@ -125,7 +125,7 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		volumes = append(volumes, *volume)
 		volumeMounts = append(volumeMounts, *volumeMount)
 	}
-	
+
 	var initContainers []corev1.Container
 
 	args := []string{
@@ -136,6 +136,7 @@ func GetPodSpecForStandaloneMode(ctx trivyoperator.PluginContext,
 		"--db-repository",
 		dbRepository,
 	}
+
 	if config.ConfigFileExists() {
 		args = append(args, "--config", configFileMountPath)
 	}

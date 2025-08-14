@@ -6404,8 +6404,7 @@ default ignore = false`,
 				ImagePullSecrets:             []corev1.LocalObjectReference{},
 				AutomountServiceAccountToken: ptr.To[bool](false),
 				Volumes: []corev1.Volume{
-					tmpVolume,
-					getScanResultVolume(),
+					tmpVolume,  
 					corev1.Volume{
 						Name: "configfile",
 						VolumeSource: corev1.VolumeSource{
@@ -6422,6 +6421,7 @@ default ignore = false`,
 							},
 						},
 					},
+					getScanResultVolume(),
 				},
 				InitContainers: []corev1.Container{
 					{
@@ -6504,6 +6504,11 @@ default ignore = false`,
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							tmpVolumeMount,
+							corev1.VolumeMount{
+								Name:	  "configfile",
+								MountPath: "/etc/trivy/trivy-config.yaml",
+								SubPath:  "trivy-config.yaml",
+							},
 						},
 						SecurityContext: &corev1.SecurityContext{
 							Privileged:               ptr.To[bool](false),
@@ -6651,12 +6656,12 @@ default ignore = false`,
 						},
 						VolumeMounts: []corev1.VolumeMount{
 							tmpVolumeMount,
-							getScanResultVolumeMount(),
 							corev1.VolumeMount{
 								Name:      "configfile",
 								MountPath: "/etc/trivy/trivy-config.yaml",
 								SubPath:   "trivy-config.yaml",
 							},
+							getScanResultVolumeMount(),
 						},
 						SecurityContext: &corev1.SecurityContext{
 							Privileged:               ptr.To[bool](false),
