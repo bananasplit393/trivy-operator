@@ -1,0 +1,27 @@
+# test-values.yaml
+
+
+# Only for running your local version 
+image: 
+  registry: docker.io
+  repository: aquasecurity/trivy-operator
+  tag: dev
+  pullPolicy: Never
+
+# Flag we want to fix configfile
+trivy:
+  configFile:
+    vulnerability:
+      vex:
+        - /tmp/trivy-vex/flink.openvex.json
+
+trivyOperator:
+  scanJobCustomVolumes:
+    - name: vex-data-volume
+      configMap:
+        name: trivy-vex-files
+
+  scanJobCustomVolumesMount:
+    - name: vex-data-volume
+      mountPath: /tmp/trivy-vex
+      readOnly: true
